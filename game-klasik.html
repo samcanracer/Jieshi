@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Drag-and-Drop Game</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .container { display: flex; gap: 50px; margin-top: 50px; }
+    .column { width: 45%; }
+    .term, .definition {
+      padding: 10px;
+      margin: 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: move;
+    }
+    .dropzone {
+      padding: 20px;
+      border: 2px dashed #aaa;
+      margin-bottom: 10px;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Cocokkan Istilah Klasik dengan Artinya</h2>
+  <div class="container">
+    <div class="column" id="terms">
+      <div class="term" draggable="true" id="term1">發於聲</div>
+      <div class="term" draggable="true" id="term2">微於色</div>
+      <div class="term" draggable="true" id="term3">空乏其身</div>
+      <div class="term" draggable="true" id="term4">人恆過</div>
+    </div>
+    <div class="column" id="definitions">
+      <div class="dropzone" data-match="term1">從聲音中表達情緒</div>
+      <div class="dropzone" data-match="term2">從表情中顯露情緒</div>
+      <div class="dropzone" data-match="term3">使他變得貧困</div>
+      <div class="dropzone" data-match="term4">人常常犯錯</div>
+    </div>
+  </div>
+
+  <script>
+    const terms = document.querySelectorAll('.term');
+    const dropzones = document.querySelectorAll('.dropzone');
+
+    terms.forEach(term => {
+      term.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', term.id);
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('dragover', e => e.preventDefault());
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData('text/plain');
+        if (draggedId === zone.dataset.match) {
+          zone.textContent = '';
+          zone.appendChild(document.getElementById(draggedId));
+          zone.style.backgroundColor = '#c8f7c5';
+        } else {
+          zone.style.backgroundColor = '#f8c8c8';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
